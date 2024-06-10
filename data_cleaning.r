@@ -18,7 +18,7 @@ pacman::p_load(tidyverse, readxl, lubridate, stringdist)
 ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ###
 
 # set the filename
-filename <- "Bird Count 2019-23.xls"
+filename <- "data/Bird Count 2019-23.xls"
 
 # find the number of tabs
 n_tabs <- length(excel_sheets(filename))
@@ -115,6 +115,14 @@ combined_data <-
 rm(list = ls(pattern = "_dates"))
 
 
+# 2.3 Cleaning the species list ####
+
+combined_data <-
+  combined_data %>%
+  filter(species != "no of species") %>% # removing the "no of species" rows
+  mutate(species = str_replace_all(species, "\\s+$", "")) # remove any trailing whitespaces
+
+
 ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### 
 # 3. Establishing standardised site names  ####################################
 ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ###
@@ -141,7 +149,7 @@ clean_visit_titles <-
   sort()
 
 # choose the standard site names file
-std_names_file <- "standard_site_names.csv"
+std_names_file <- "data/standard_site_names.csv"
 
 # import the standard site names csv file and extract the only column as a character vector
 std_names <- read_csv(std_names_file, col_names = FALSE, show_col_types = FALSE)$X1
