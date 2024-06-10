@@ -206,3 +206,6 @@ final_data <-
 
 # review the final data
 final_data
+
+# remove everything except the final, clean data set
+rm(list=setdiff(ls(), "final_data"))
